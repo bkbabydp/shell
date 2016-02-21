@@ -235,7 +235,7 @@ function set_obfssh()
   declare file_exec="/usr/local/sbin/sshd"
   declare file_conf="/usr/local/etc/sshd_config"
 
-  if [ -x "$file_exec" ]; then
+  if [[ -x "$file_exec" ]]; then
     yum install zlib-devel \
                 openssl-devel \
                 -y
