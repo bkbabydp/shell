@@ -236,6 +236,9 @@ function set_obfssh()
   declare file_conf="/usr/local/etc/sshd_config"
 
   if [[ -x "$file_exec" ]]; then
+    echo -e "${BK_CODE_YELLOW}${BK_CODE_BOLD}Obfuscated-openssh has been installed.${BK_CODE_RESET}"
+  else
+    echo -e "${BK_CODE_YELLOW}${BK_CODE_BOLD}Installing Obfuscated-openssh...${BK_CODE_RESET}"
     yum install zlib-devel \
                 openssl-devel \
                 -y
@@ -253,7 +256,7 @@ function set_obfssh()
     firewall-cmd --add-port=8022/tcp --permanent
     "$file_exec" -f "$file_conf"
   else
-    echo -e "${BK_CODE_YELLOW}${BK_CODE_BOLD}Password is empty! Stopped!{BK_CODE_RESET}"
+    echo -e "${BK_CODE_YELLOW}${BK_CODE_BOLD}Password is empty! Stopped!${BK_CODE_RESET}"
   fi
 }
 
