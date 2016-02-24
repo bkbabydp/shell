@@ -330,6 +330,7 @@ HELP
 
 # main
 declare basepath=$(cd `dirname "$0"`; pwd)
+cd "$basepath"
 
 if [[ $# = 0 ]]; then
   set_help
