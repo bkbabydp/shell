@@ -68,7 +68,7 @@ function set_value()
   if [[ $# = 4 ]]; then
     declare re=$(make_re "$1" "$2" "$3")
     declare new="$3"; declare file="$4"
-    declare lines=$(sed -n "/^$re$/=" "$file"); echo $lines
+    declare lines=$(sed -rn "/^$re$/=" "$file"); echo $lines
 
     echo -e "${BK_CODE_YELLOW}${BK_CODE_BOLD}set $re to $new in $file${BK_CODE_RESET}"
 
@@ -85,7 +85,7 @@ function set_value()
       echo "sed command: $cmd"
       sed -i.bak "$cmd" "$file"
     else # i=0
-      declare lines=$(sed -n "/^#$re$/=" "$file")
+      declare lines=$(sed -rn "/^#$re$/=" "$file")
       for l in $lines; do
         ((i++))
         sed -i.bak "$l a $new" "$file"
