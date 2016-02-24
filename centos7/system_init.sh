@@ -230,7 +230,7 @@ function set_dev()
 }
 
 # *10
-function set_obfssh()
+function set_obfsshd()
 {
   declare file_exec="/usr/local/sbin/sshd"
   declare file_conf="/usr/local/etc/sshd_config"
@@ -260,6 +260,23 @@ function set_obfssh()
   fi
 }
 
+# *11
+function set_ngrokd()
+{
+  declare file_exec="/usr/local/sbin/ngrokd"
+
+  if [[ -x "$file_exec" ]]; then
+    echo -e "${BK_CODE_YELLOW}${BK_CODE_BOLD}Ngrok has been installed.${BK_CODE_RESET}"
+  else
+    echo -e "${BK_CODE_YELLOW}${BK_CODE_BOLD}Installing Ngrok...${BK_CODE_RESET}"
+    git clone https://github.com/inconshreveable/ngrok.git
+    cd ngrok && make release-server && cp ./ngrokd "$file_exec"
+  fi
+
+  firewall-cmd --add-port=4443/tcp --permanent
+  "$file_exec" -domain="ngrok.lzw.name"
+}
+
 function set_more()
 {
   set_ssh
@@ -286,7 +303,8 @@ Actions:
     7. ban            Install the fail2ban.
     8. shadowsocks    Install the shadowsocks.
     9. dev            Install the enviroment of dev.
-    10. obfssh        Install obfuscated-openssh.
+    10. obfsshd        Install obfuscated-openssh.
+    11. ngrokd         Install ngrokd.
 
 This command help you init the VPS on DO.
 
