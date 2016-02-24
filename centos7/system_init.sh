@@ -68,7 +68,7 @@ function set_value()
   if [[ $# = 4 ]]; then
     declare re=$(make_re "$1" "$2" "$3")
     declare new="$3"; declare file="$4"
-    declare lines=$(sed -n "/^$re$/=" "$file")
+    declare lines=$(sed -n "/^$re$/=" "$file"); echo $lines
 
     echo -e "${BK_CODE_YELLOW}${BK_CODE_BOLD}set $re to $new in $file${BK_CODE_RESET}"
 
@@ -274,7 +274,7 @@ function set_ngrokd()
   fi
 
   firewall-cmd --add-port=4443/tcp --permanent
-  "$file_exec" -domain="ngrok.lzw.name"
+  "$file_exec" -domain="ngrok.lzw.name" -httpAddr=":8480" -httpsAddr=":8443"
 }
 
 # *12
