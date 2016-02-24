@@ -282,7 +282,9 @@ function set_ngrokd()
 function set_go()
 {
   bash < <(curl -s -S -L https://raw.githubusercontent.com/moovweb/gvm/master/binscripts/gvm-installer)
-  yum install golang -y && gvm use system --default && go get -u github.com/gpmgo/gopm
+  yum install golang -y
+  gvm use system --default
+  go get -u github.com/gpmgo/gopm
 }
 
 function set_more()
