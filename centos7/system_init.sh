@@ -270,6 +270,7 @@ function set_ngrokd()
   else
     echo -e "${BK_CODE_YELLOW}${BK_CODE_BOLD}Installing Ngrok...${BK_CODE_RESET}"
     git clone https://github.com/inconshreveable/ngrok.git
+    yum install golang -y
     cd ngrok && make release-server && cp ./ngrokd "$file_exec"
   fi
 
@@ -319,10 +320,13 @@ HELP
 }
 
 # main
+declare basepath=$(cd `dirname "$0"`; pwd)
+
 if [[ $# = 0 ]]; then
   set_help
 else
   for action in $@; do
     set_$action
+    cd "$basepath"
   done
 fi
