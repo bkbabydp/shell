@@ -123,6 +123,12 @@ function set_yum()
   yum install yum-cron -y
   set_value "\s*0\s*=\s*\w*" "0" "apply_updates = yes" "/etc/yum/yum-cron.conf"
   go_serv "yum-cron.service"
+  yum install yum-axelget \
+              yum-langpacks \
+              yum-plugin-fastestmirror \
+              yum-plugin-remove-with-leaves \
+              yum-plugin-show-leaves \
+              -y
 }
 
 # *3
@@ -133,7 +139,6 @@ function set_update()
   # install deps
   yum install epel-release -y
   yum install bash-completion \
-              yum-axelget \
               git \
               vim \
               -y
