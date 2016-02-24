@@ -278,6 +278,13 @@ function set_ngrokd()
   "$file_exec" -domain="ngrok.lzw.name"
 }
 
+# *12
+function set_go()
+{
+  bash < <(curl -s -S -L https://raw.githubusercontent.com/moovweb/gvm/master/binscripts/gvm-installer)
+  yum install golang -y && gvm use system --default && go get -u github.com/gpmgo/gopm
+}
+
 function set_more()
 {
   set_ssh
@@ -304,8 +311,9 @@ Actions:
     7. ban            Install the fail2ban.
     8. shadowsocks    Install the shadowsocks.
     9. dev            Install the enviroment of dev.
-    10. obfsshd        Install obfuscated-openssh.
-    11. ngrokd         Install ngrokd.
+    10. obfsshd       Install obfuscated-openssh.
+    11. ngrokd        Install ngrokd.
+    12. go            Install golang.
 
 This command help you init the VPS on DO.
 
