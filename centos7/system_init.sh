@@ -102,7 +102,7 @@ function set_value()
 # -----main functions-----
 
 # *1
-function set_hostname()
+function do_hostname()
 {
     declare new_name="$1"; declare old_name=$(hostname);
     if [[ -z "$new_name" ]]; then
@@ -115,7 +115,7 @@ function set_hostname()
 }
 
 # *2
-function set_yum()
+function do_yum()
 {
   # yum-conf
   set_value "\s*0\s*=\s*\w*" "0" "clean_requirements_on_remove=1" "/etc/yum.conf"
@@ -132,7 +132,7 @@ function set_yum()
 }
 
 # *3
-function set_update()
+function do_update()
 {
   # tmux
   yum install tmux -y # && tmux
@@ -147,13 +147,13 @@ function set_update()
 }
 
 # *4
-function set_rootpwd()
+function do_rootpwd()
 {
   passwd root
 }
 
 # *5
-function set_ssh()
+function do_ssh()
 {
   declare file="/etc/ssh/sshd_config"; declare re="\s*0\s+\w+\s*"
   set_value "$re" "0" "Port 8322" "$file"
@@ -169,7 +169,7 @@ function set_ssh()
 }
 
 # *6
-function set_david()
+function do_david()
 {
   declare file="/etc/ssh/sshd_config"; declare re="\s*0\s+\w+\s*"
   set_value "$re" "0" "PermitRootLogin no" "$file"
@@ -179,7 +179,7 @@ function set_david()
 }
 
 # *7
-function set_ban()
+function do_ban()
 {
   yum install fail2ban-firewalld \
               fail2ban-server \
@@ -201,7 +201,7 @@ EOF
 }
 
 # *8
-function set_shadowsocks()
+function do_shadowsocks()
 {
   curl "https://copr.fedoraproject.org/coprs/librehat/shadowsocks/repo/epel-7/librehat-shadowsocks-epel-7.repo" -o "/etc/yum.repos.d/librehat-shadowsocks-epel-7.repo"
   yum update -y
@@ -224,7 +224,7 @@ EOF
 }
 
 # *9
-function set_dev()
+function do_dev()
 {
   yum install gcc \
               automake \
@@ -235,7 +235,20 @@ function set_dev()
 }
 
 # *10
-function set_obfsshd()
+function do_supervisor()
+{
+  declare file_exec="/usr/bin/supervisord"
+  if [[ -x "$file_exec" ]]; then
+    echo -e "${BK_CODE_YELLOW}${BK_CODE_BOLD}Supervisor has been installed.${BK_CODE_RESET}"
+  else
+    echo -e "${BK_CODE_YELLOW}${BK_CODE_BOLD}Installing Supervisor...${BK_CODE_RESET}"
+    yum install supervisor -y
+    go_serv "supervisord.service"
+  fi
+}
+
+# *11
+function do_obfsshd()
 {
   declare file_exec="/usr/local/sbin/sshd"
   declare file_conf="/usr/local/etc/sshd_config"
@@ -259,14 +272,23 @@ function set_obfsshd()
     set_value "$re" "0" "ObfuscatedPort 8022" "$file_conf"
     set_value "$re" "0" "ObfuscateKeyword $pwd" "$file_conf"
     firewall-cmd --add-port=8022/tcp --permanent
-    "$file_exec" -f "$file_conf"
+    cat > /etc/supervisord.d/obfsshd.ini <<EOF
+[program:obfsshd]
+command = "$file_exec" -f "$file_conf"
+user = root
+autostart = true
+autorestart = true
+stdout_logfile = /var/log/obfsshd/out.log
+stderr_logfile = /var/log/obfsshd/err.log
+EOF
+    #"$file_exec" -f "$file_conf"
   else
     echo -e "${BK_CODE_YELLOW}${BK_CODE_BOLD}Password is empty! Stopped!${BK_CODE_RESET}"
   fi
 }
 
-# *11
-function set_ngrokd()
+# *12
+function do_ngrokd()
 {
   declare file_exec="/usr/local/sbin/ngrokd"
 
@@ -277,13 +299,13 @@ function set_ngrokd()
     git clone https://github.com/bkbabydp/ngrok.git
     cd ngrok && make release-server && cp ./bin/ngrokd "$file_exec"
   fi
-
+  
   firewall-cmd --add-port=4443/tcp --permanent
-  "$file_exec" -domain="ngrok.lzw.name" -httpAddr=":8480" -httpsAddr=":8443"
+  #"$file_exec" -domain="ngrok.lzw.name" -httpAddr=":8480" -httpsAddr=":8443"
 }
 
-# *12
-function set_go()
+# *13
+function do_go()
 {
   bash < <(curl -s -S -L https://raw.githubusercontent.com/moovweb/gvm/master/binscripts/gvm-installer)
   yum install golang -y
@@ -291,16 +313,16 @@ function set_go()
   go get -u github.com/gpmgo/gopm
 }
 
-function set_more()
+function do_more()
 {
-  set_ssh
-  set_david
-  set_ban
-  set_shadowsocks
+  do_ssh
+  do_david
+  do_ban
+  do_shadowsocks
 }
 
 # *0
-function set_help()
+function do_help()
 {
   declare name=$(basename $0)
   cat << HELP
@@ -338,10 +360,10 @@ declare basepath=$(cd `dirname "$0"`; pwd)
 cd "$basepath"
 
 if [[ $# = 0 ]]; then
-  set_help
+  do_help
 else
   for action in $@; do
-    set_$action
+    do_$action
     cd "$basepath"
   done
 fi
