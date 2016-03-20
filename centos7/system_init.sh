@@ -273,7 +273,10 @@ function do_obfsshd()
     set_value "$re" "0" "ObfuscatedPort 8022" "$file_conf"
     set_value "$re" "0" "ObfuscateKeyword $pwd" "$file_conf"
     firewall-cmd --add-port=8022/tcp --permanent
-    mkdir "$dir_log"
+    do_supervisor
+    if [[ -d "$dir_log" ]]; then
+      mkdir "$dir_log"
+    fi
     cat > /etc/supervisord.d/obfsshd.ini <<EOF
 [program:obfsshd]
 command = "$file_exec" -f "$file_conf"
