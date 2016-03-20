@@ -339,9 +339,10 @@ Actions:
     7. ban            Install the fail2ban.
     8. shadowsocks    Install the shadowsocks.
     9. dev            Install the enviroment of dev.
-    10. obfsshd       Install obfuscated-openssh.
-    11. ngrokd        Install ngrokd.
-    12. go            Install golang.
+    10. supervisor    Install the Supervisor.
+    11. obfsshd       Install obfuscated-openssh.
+    12. ngrokd        Install ngrokd.
+    13. go            Install golang.
 
 This command help you init the VPS on DO.
 
