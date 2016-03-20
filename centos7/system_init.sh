@@ -279,12 +279,12 @@ function do_obfsshd()
     fi
     cat > /etc/supervisord.d/obfsshd.ini <<EOF
 [program:obfsshd]
-command = "$file_exec" -f "$file_conf"
+command = $file_exec -f $file_conf
 user = root
 autostart = true
 autorestart = true
-stdout_logfile = "$dir_log/out.log"
-stderr_logfile = "$dir_log/err.log"
+stdout_logfile = $dir_log/out.log
+stderr_logfile = $dir_log/err.log
 EOF
     #"$file_exec" -f "$file_conf"
   else
