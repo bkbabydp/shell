@@ -296,6 +296,7 @@ EOF
 function do_ngrokd()
 {
   declare file_exec="/usr/local/sbin/ngrokd"
+  declare dir_log="/var/log/ngrokd"
 
   if [[ -x "$file_exec" ]]; then
     echo -e "${BK_CODE_YELLOW}${BK_CODE_BOLD}Ngrok has been installed.${BK_CODE_RESET}"
@@ -306,6 +307,19 @@ function do_ngrokd()
   fi
   
   firewall-cmd --add-port=4443/tcp --permanent
+  do_supervisor
+  if [[ ! -d "$dir_log" ]]; then
+    mkdir "$dir_log"
+  fi
+  cat > /etc/supervisord.d/ngrokd.ini <<EOF
+[program:ngrokd]
+command = $file_exec -domain="ngrok.lzw.name" -httpAddr=":8480" -httpsAddr=":8443"
+user = root
+autostart = true
+autorestart = true
+stdout_logfile = $dir_log/out.log
+stderr_logfile = $dir_log/err.log
+EOF
   #"$file_exec" -domain="ngrok.lzw.name" -httpAddr=":8480" -httpsAddr=":8443"
 }
 
