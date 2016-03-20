@@ -252,6 +252,7 @@ function do_obfsshd()
 {
   declare file_exec="/usr/local/sbin/sshd"
   declare file_conf="/usr/local/etc/sshd_config"
+  declare dir_log="/var/log/obfsshd"
 
   if [[ -x "$file_exec" ]]; then
     echo -e "${BK_CODE_YELLOW}${BK_CODE_BOLD}Obfuscated-openssh has been installed.${BK_CODE_RESET}"
@@ -267,19 +268,20 @@ function do_obfsshd()
   declare re="\s*0\s+\w+\s*"
   declare pwd=""
   
-  echo "Password of obfuscated-openssh:"; read pwd
+  echo "Password of obfuscated-openssh:"; read -s pwd
   if [[ -n "$pwd" ]]; then
     set_value "$re" "0" "ObfuscatedPort 8022" "$file_conf"
     set_value "$re" "0" "ObfuscateKeyword $pwd" "$file_conf"
     firewall-cmd --add-port=8022/tcp --permanent
+    mkdir "$dir_log"
     cat > /etc/supervisord.d/obfsshd.ini <<EOF
 [program:obfsshd]
 command = "$file_exec" -f "$file_conf"
 user = root
 autostart = true
 autorestart = true
-stdout_logfile = /var/log/obfsshd/out.log
-stderr_logfile = /var/log/obfsshd/err.log
+stdout_logfile = "$dir_log"/out.log
+stderr_logfile = "$dir_log"/err.log
 EOF
     #"$file_exec" -f "$file_conf"
   else
