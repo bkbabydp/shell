@@ -313,7 +313,7 @@ function do_ngrokd()
   fi
   cat > /etc/supervisord.d/ngrokd.ini <<EOF
 [program:ngrokd]
-command = $file_exec -domain="ngrok.lzw.name" -httpAddr=":8480" -httpsAddr=":8443"
+command = $file_exec -domain="ngrok.lzw.name" -httpAddr="127.0.0.1:80" -httpsAddr="127.0.0.1:443"
 user = root
 autostart = true
 autorestart = true
