@@ -1,3 +1,17 @@
 #! /usr/bin/env bash
 
-mkdir /data/ && cd /data && yum install git -y && git clone https://github.com/bkbabydp/shell.git
+echo "Creating /data..."
+
+if [ ! -d "/data" ]; then
+  mkdir /data
+fi
+
+echo "Installing git..."
+
+yum install -y git
+
+echo "Clone shell.git..."
+
+cd /data &&  && git clone https://github.com/bkbabydp/shell.git
+
+echo "done."
