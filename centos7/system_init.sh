@@ -209,7 +209,7 @@ function do_shadowsocks()
   cat > /etc/shadowsocks-libev/config.json <<EOF
 {
   "server":"0.0.0.0",
-  "server_port":8388,
+  "server_port":8688,
   "local_address":"127.0.0.1",
   "local_port":1080,
   "password":"bkbabydppwd",
