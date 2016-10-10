@@ -219,8 +219,8 @@ function do_shadowsocks()
 }
 EOF
   go_serv "shadowsocks-libev.service"
-  firewall-cmd --add-port=8388/tcp --permanent
-  firewall-cmd --add-port=8388/udp --permanent
+  firewall-cmd --add-port=8688/tcp --permanent
+  firewall-cmd --add-port=8688/udp --permanent
 }
 
 # *9
