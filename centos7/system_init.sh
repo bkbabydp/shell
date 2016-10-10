@@ -203,7 +203,7 @@ EOF
 # *8
 function do_shadowsocks()
 {
-  curl "https://copr.fedoraproject.org/coprs/librehat/shadowsocks/repo/epel-7/librehat-shadowsocks-epel-7.repo" -o "/etc/yum.repos.d/librehat-shadowsocks-epel-7.repo"
+  curl -sSL "https://copr.fedoraproject.org/coprs/librehat/shadowsocks/repo/epel-7/librehat-shadowsocks-epel-7.repo" -o "/etc/yum.repos.d/librehat-shadowsocks-epel-7.repo"
   yum update -y
   yum install shadowsocks-libev -y
   cat > /etc/shadowsocks-libev/config.json <<EOF
