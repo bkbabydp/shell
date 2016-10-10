@@ -12,6 +12,6 @@ yum install -y git
 
 echo "Clone shell.git..."
 
-cd /data &&  && git clone https://github.com/bkbabydp/shell.git
+cd /data && git clone https://github.com/bkbabydp/shell.git
 
 echo "done."
