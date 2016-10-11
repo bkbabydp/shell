@@ -328,6 +328,7 @@ function do_go()
 {
   yum install golang curl git make bison gcc glibc-devel -y
   bash < <(curl -sSL https://raw.githubusercontent.com/moovweb/gvm/master/binscripts/gvm-installer)
+  source $HOME/.gvm/scripts/gvm
   gvm install go1.4
   gvm use go1.4 --default
   # gvm use system --default
