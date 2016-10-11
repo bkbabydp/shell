@@ -293,6 +293,18 @@ EOF
 }
 
 # *12
+function do_go()
+{
+  yum install golang curl git make bison gcc glibc-devel -y
+  bash < <(curl -sSL https://raw.githubusercontent.com/moovweb/gvm/master/binscripts/gvm-installer)
+  source $HOME/.gvm/scripts/gvm
+  # gvm install go1.4
+  # gvm use go1.4 --default
+  gvm use system --default # 1.6.3
+  go get -u github.com/gpmgo/gopm
+}
+
+# *13
 function do_ngrokd()
 {
   declare file_exec="/usr/local/sbin/ngrokd"
@@ -321,18 +333,6 @@ stdout_logfile = $dir_log/out.log
 stderr_logfile = $dir_log/err.log
 EOF
   #"$file_exec" -domain="ngrok.lzw.name" -httpAddr=":8480" -httpsAddr=":8443"
-}
-
-# *13
-function do_go()
-{
-  yum install golang curl git make bison gcc glibc-devel -y
-  bash < <(curl -sSL https://raw.githubusercontent.com/moovweb/gvm/master/binscripts/gvm-installer)
-  source $HOME/.gvm/scripts/gvm
-  # gvm install go1.4
-  # gvm use go1.4 --default
-  gvm use system --default # 1.6.3
-  go get -u github.com/gpmgo/gopm
 }
 
 function do_more()
