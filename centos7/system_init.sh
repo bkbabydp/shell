@@ -359,12 +359,13 @@ Actions:
     5. ssh            Set the ssh.
     6. david          Create new user named david.
     7. ban            Install the fail2ban.
+    7.5. conf         Setting conf.
     8. shadowsocks    Install the shadowsocks.
     9. dev            Install the enviroment of dev.
     10. supervisor    Install the Supervisor.
     11. obfsshd       Install obfuscated-openssh.
-    12. ngrokd        Install ngrokd.
-    13. go            Install golang.
+    12. go            Install golang.
+    13. ngrokd        Install ngrokd.
 
 This command help you init the VPS on DO.
 
@@ -384,6 +385,8 @@ cd "$basepath"
 
 if [[ $# = 0 ]]; then
   do_help
+elif [[ $1 = "conf" ]]; then
+  set_value "$2" "$3" "$4" "$5"
 else
   for action in $@; do
     do_$action
