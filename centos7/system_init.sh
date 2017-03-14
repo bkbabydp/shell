@@ -409,7 +409,7 @@ if [[ $# = 0 ]]; then
 elif [[ $1 = "conf" ]]; then
   set_value "$2" "$3" "$4" "$5"
 elif [[ $1 = "enable_pwd_login" ]]; then
-  enable_pwd_login "$2"
+  do_enable_pwd_login "$2"
 else
   for action in $@; do
     do_$action
