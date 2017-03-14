@@ -37,8 +37,8 @@ function show_serv()
 function go_serv()
 {
   if [[ -n "$1" ]]; then
-    set_serv "$1"
-    show_serv "$1"
+    set_serv "$1.service"
+    show_serv "$1.service"
   fi
 }
 
@@ -122,7 +122,7 @@ function do_yum()
   # yum-cron
   yum install yum-cron -y
   set_value "\s*0\s*=\s*\w*" "0" "apply_updates = yes" "/etc/yum/yum-cron.conf"
-  go_serv "yum-cron.service"
+  go_serv "yum-cron"
   yum install yum-axelget \
               yum-langpacks \
               yum-plugin-fastestmirror \
@@ -163,7 +163,7 @@ function do_ssh()
   set_value "$re" "0" "GSSAPIAuthentication no" "$file"
 
   yum install firewalld -y
-  go_serv "firewalld.service"
+  go_serv "firewalld"
   firewall-cmd --add-port=8322/tcp --permanent
   firewall-cmd --remove-service=ssh --permanent
 }
@@ -194,7 +194,7 @@ maxretry = 3
 enabled = true
 port = 0:65535
 EOF
-  go_serv "fail2ban.service"
+  go_serv "fail2ban"
   fail2ban-client ping
   fail2ban-client status
   fail2ban-client status sshd
@@ -218,7 +218,7 @@ function do_shadowsocks()
   "fast_open":true
 }
 EOF
-  go_serv "shadowsocks-libev.service"
+  go_serv "shadowsocks-libev"
   firewall-cmd --add-port=8688/tcp --permanent
   firewall-cmd --add-port=8688/udp --permanent
 }
@@ -243,7 +243,7 @@ function do_supervisor()
   else
     echo -e "${BK_CODE_YELLOW}${BK_CODE_BOLD}Installing Supervisor...${BK_CODE_RESET}"
     yum install supervisor -y
-    go_serv "supervisord.service"
+    go_serv "supervisord"
   fi
 }
 
@@ -361,6 +361,12 @@ function do_enable_pwd_login()
   fi
 }
 
+function do_docker()
+{
+  yum install docker -y
+  go_serv "docker"
+}
+
 # *0
 function do_help()
 {
@@ -387,6 +393,7 @@ Actions:
 
     14. normal        yum + update + rootpwd + ssh + david + ban
     15. enable_pwd_login yes|no
+    16. docker        Install docker.
 
 This command help you init the VPS on DO.
 
