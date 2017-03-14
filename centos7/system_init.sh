@@ -343,6 +343,24 @@ function do_more()
   do_shadowsocks
 }
 
+function do_normal()
+{
+  do_yum
+  do_update
+  do_rootpwd
+  do_ssh
+  do_david
+  do_ban
+}
+
+function do_enable_pwd_login()
+{
+  if [[ $# = 1 ]]; then
+    declare file="/etc/ssh/sshd_config"; declare re="\s*0\s+\w+\s*"
+    set_value "$re" "0" "PasswordAuthentication $1" "$file"
+  fi
+}
+
 # *0
 function do_help()
 {
@@ -367,6 +385,9 @@ Actions:
     12. go            Install golang.
     13. ngrokd        Install ngrokd.
 
+    14. normal        yum + update + rootpwd + ssh + david + ban
+    15. enable_pwd_login yes|no
+
 This command help you init the VPS on DO.
 
 Important!
@@ -387,6 +408,8 @@ if [[ $# = 0 ]]; then
   do_help
 elif [[ $1 = "conf" ]]; then
   set_value "$2" "$3" "$4" "$5"
+elif [[ $1 = "enable_pwd_login" ]]; then
+  enable_pwd_login "$2"
 else
   for action in $@; do
     do_$action
