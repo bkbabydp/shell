@@ -383,7 +383,7 @@ function do_shadowsocks2()
               -p 8388:8388 \
               mritd/shadowsocks \
               -s "-s 0.0.0.0 -p 8388 -m aes-256-cfb -k bkbabydppwd --fast-open"
-  firewall-cmd --add-port=8322/tcp --permanent
+  firewall-cmd --add-port=8388/tcp --permanent
   firewall-cmd --reload
 }
 
