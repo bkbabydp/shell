@@ -378,12 +378,20 @@ function do_docker()
 
 function do_shadowsocks2()
 {
+  declare port_s=8388
+  declare port_k=8389
+  declare password=bkbabydppwd
+  docker rm ss -f
   docker run -dt \
               --name ss \
-              -p 8388:8388 \
+              -p $port_s:$port_s \
+              -p $port_k:$port_k/udp \
               mritd/shadowsocks \
-              -s "-s 0.0.0.0 -p 8388 -m aes-256-cfb -k bkbabydppwd --fast-open"
-  firewall-cmd --add-port=8388/tcp --permanent
+              -s "-s 0.0.0.0 -p $port_s -m aes-256-cfb -k $password --fast-open" \
+              -k "-t 127.0.0.1:$port_s -l :$port_k -mode fast2" \
+              -x
+  firewall-cmd --add-port=$port_s/tcp --permanent
+  firewall-cmd --add-port=$port_k/udp --permanent
   firewall-cmd --reload
 }
 
