@@ -380,7 +380,7 @@ function do_shadowsocks2()
 {
   docker run -dt \
               --name ss \
-              -p 6443:6443 \
+              -p 8388:8388 \
               mritd/shadowsocks \
               -s "-s 0.0.0.0 -p 8388 -m aes-256-cfb -k bkbabydppwd --fast-open"
 }
@@ -412,7 +412,7 @@ Actions:
     14. normal        yum + update + rootpwd + ssh + david + ban
     15. enable_pwd_login yes|no
     16. docker        Install docker.
-    17. do_shadowsocks2
+    17. shadowsocks2
 
 This command help you init the VPS on DO.
 
