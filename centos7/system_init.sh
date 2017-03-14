@@ -412,6 +412,7 @@ Actions:
     14. normal        yum + update + rootpwd + ssh + david + ban
     15. enable_pwd_login yes|no
     16. docker        Install docker.
+    17. do_shadowsocks2
 
 This command help you init the VPS on DO.
 
