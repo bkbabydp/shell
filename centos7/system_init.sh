@@ -363,7 +363,11 @@ function do_enable_pwd_login()
 
 function do_docker()
 {
-  yum install docker -y
+  yum install -y yum-utils
+  yum-config-manager --add-repo \
+                      https://download.docker.com/linux/centos/docker-ce.repo
+  yum makecache fast
+  yum install docker-ce -y
   go_serv "docker"
 }
 
