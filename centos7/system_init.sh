@@ -368,6 +368,11 @@ function do_docker()
                       https://download.docker.com/linux/centos/docker-ce.repo
   yum makecache fast
   yum install docker-ce -y
+
+  yum install python34 python34-pip -y
+  pip3 install --upgrade pip
+  pip3 install docker-compose
+
   go_serv "docker"
 }
 
