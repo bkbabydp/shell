@@ -376,6 +376,15 @@ function do_docker()
   go_serv "docker"
 }
 
+function do_shadowsocks2()
+{
+  docker run -dt \
+              --name ss \
+              -p 6443:6443 \
+              mritd/shadowsocks \
+              -s "-s 0.0.0.0 -p 8388 -m aes-256-cfb -k bkbabydppwd --fast-open"
+}
+
 # *0
 function do_help()
 {
