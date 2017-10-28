@@ -75,6 +75,9 @@ function do_selinux()
 # 设置安全ssh：1、默认8322端口；2、不允许空密码；3、ssh自动重连；4、禁止其他登录方式；5、安装防火墙允许ssh
 function do_ssh()
 {
+  do_selinux "permissive"
+  do_pwdlogin "yes"
+  
   declare file="/etc/ssh/sshd_config"; declare re="\s*0\s+\w+\s*"
   set_value "$re" "0" "Port 8322" "$file"
   set_value "$re" "0" "PermitEmptyPasswords no" "$file"
@@ -307,7 +310,7 @@ Actions:
     rootpwd        Set the password of root user.
     selinux        enforcing | permissive | disabled
     ssh            Set the ssh.
-    david          Create new user named david.
+    david          Create new user named david.（要记得上传david的ssh）
     ban            Install the fail2ban.
     conf           Setting conf.
     shadowsocks    Install the shadowsocks.
