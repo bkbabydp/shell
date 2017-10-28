@@ -22,6 +22,7 @@ function do_hostname()
 }
 
 # *2
+# 设置yum：1、卸载包时自动清除依赖；2、开启自动更新；3、安装常用yum插件
 function do_yum()
 {
   # yum-conf
@@ -39,6 +40,7 @@ function do_yum()
 }
 
 # *3
+# 1、安装常用包；2、更新现有包
 function do_update()
 {
   # tmux
@@ -54,12 +56,21 @@ function do_update()
 }
 
 # *4
+# 设置root密码
 function do_rootpwd()
 {
   passwd root
 }
 
+# 关闭selinux
+function do_selinux()
+{
+  declare file="/etc/sysconfig/selinux"; declare re="\s*0\s*=\s*\w*"
+  set_value "$re" "0" "SELINUX=disabled" "$file"
+}
+
 # *5
+# 设置安全ssh：1、默认8322端口；2、不允许空密码；3、ssh自动重连；4、禁止其他登录方式；5、安装防火墙允许ssh
 function do_ssh()
 {
   declare file="/etc/ssh/sshd_config"; declare re="\s*0\s+\w+\s*"
@@ -76,6 +87,7 @@ function do_ssh()
 }
 
 # *6
+# 设置一般用户：1、添加用户david；2、配置ssh仅允许一般用户登录
 function do_david()
 {
   declare file="/etc/ssh/sshd_config"; declare re="\s*0\s+\w+\s*"
@@ -86,6 +98,7 @@ function do_david()
 }
 
 # *7
+# 安装ban
 function do_ban()
 {
   yum install fail2ban-firewalld \
@@ -285,26 +298,27 @@ function do_help()
 Usage: [sudo] $name [action]
 
 Actions:
-    0. help           Print this help.
-    1. hostname       Set the hostname.
-    2. yum            Set the yum.
-    3. update         Install the update.
-    4. rootpwd        Set the password of root user.
-    5. ssh            Set the ssh.
-    6. david          Create new user named david.
-    7. ban            Install the fail2ban.
-    7.5. conf         Setting conf.
-    8. shadowsocks    Install the shadowsocks.
-    9. dev            Install the enviroment of dev.
-    10. supervisor    Install the Supervisor.
-    11. obfsshd       Install obfuscated-openssh.
-    12. go            Install golang.
-    13. ngrokd        Install ngrokd.
+    help           Print this help.
+    hostname       Set the hostname.
+    yum            Set the yum.
+    update         Install the update.
+    rootpwd        Set the password of root user.
+    selinux        
+    ssh            Set the ssh.
+    david          Create new user named david.
+    ban            Install the fail2ban.
+    conf           Setting conf.
+    shadowsocks    Install the shadowsocks.
+    dev            Install the enviroment of dev.
+    supervisor     Install the Supervisor.
+    obfsshd        Install obfuscated-openssh.
+    go             Install golang.
+    ngrokd         Install ngrokd.
 
-    14. normal        yum + update + rootpwd + ssh + david + ban
-    15. enable_pwd_login yes|no
-    16. docker        Install docker.
-    17. shadowsocks2
+    normal           yum + update + rootpwd + ssh + david + ban
+    enable_pwd_login yes|no
+    docker           Install docker.
+    shadowsocks2
 
 This command help you init the VPS on DO.
 
