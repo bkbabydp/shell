@@ -65,8 +65,10 @@ function do_rootpwd()
 # 关闭selinux
 function do_selinux()
 {
-  declare file="/etc/sysconfig/selinux"; declare re="\s*0\s*=\s*\w*"
-  set_value "$re" "0" "SELINUX=disabled" "$file"
+  if [[ $# = 1 ]]; then
+    declare file="/etc/sysconfig/selinux"; declare re="\s*0\s*=\s*\w*"
+    set_value "$re" "0" "SELINUX=$1" "$file"
+  fi
 }
 
 # *5
@@ -248,7 +250,7 @@ function do_normal()
   do_ban
 }
 
-function do_enable_pwd_login()
+function do_pwdlogin()
 {
   if [[ $# = 1 ]]; then
     declare file="/etc/ssh/sshd_config"; declare re="\s*0\s+\w+\s*"
@@ -303,7 +305,7 @@ Actions:
     yum            Set the yum.
     update         Install the update.
     rootpwd        Set the password of root user.
-    selinux        
+    selinux        enforcing | permissive | disabled
     ssh            Set the ssh.
     david          Create new user named david.
     ban            Install the fail2ban.
@@ -315,9 +317,9 @@ Actions:
     go             Install golang.
     ngrokd         Install ngrokd.
 
-    normal           yum + update + rootpwd + ssh + david + ban
-    enable_pwd_login yes|no
-    docker           Install docker.
+    normal         yum + update + rootpwd + ssh + david + ban
+    pwdlogin       yes | no
+    docker         Install docker.
     shadowsocks2
 
 This command help you init the VPS on DO.
@@ -339,8 +341,10 @@ if [[ $# = 0 ]]; then
   do_help
 elif [[ $1 = "conf" ]]; then
   set_value "$2" "$3" "$4" "$5"
-elif [[ $1 = "enable_pwd_login" ]]; then
-  do_enable_pwd_login "$2"
+elif [[ $1 = "selinux" ]]; then
+  do_selinux "$2"
+elif [[ $1 = "pwdlogin" ]]; then
+  do_pwdlogin "$2"
 else
   for action in $@; do
     do_$action
