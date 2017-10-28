@@ -66,7 +66,7 @@ function do_rootpwd()
 function do_selinux()
 {
   if [[ $# = 1 ]]; then
-    declare file="/etc/sysconfig/selinux"; declare re="\s*0\s*=\s*\w*"
+    declare file="/etc/selinux/config"; declare re="\s*0\s*=\s*\w*"
     set_value "$re" "0" "SELINUX=$1" "$file"
   fi
 }
@@ -77,7 +77,7 @@ function do_ssh()
 {
   do_selinux "permissive"
   do_pwdlogin "yes"
-  
+
   declare file="/etc/ssh/sshd_config"; declare re="\s*0\s+\w+\s*"
   set_value "$re" "0" "Port 8322" "$file"
   set_value "$re" "0" "PermitEmptyPasswords no" "$file"
