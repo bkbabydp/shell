@@ -1,0 +1,11 @@
+version: '3'
+services:
+
+  sserver:
+    image: brainqi/shadowsocks-server:latest
+    restart: always
+    ports:
+      - '8838:8838'
+    environment:
+      - TZ=Asia/Shanghai
+    command: -k=bkbabydppwd --p=8838 -m=aes-256-cfb
