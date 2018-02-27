@@ -1,11 +1,25 @@
 version: '3'
 services:
 
+  # docker run -dt --name ssserver -p 6443:6443 -p 6500:6500/udp mritd/shadowsocks -m "ss-server" -s "-s 0.0.0.0 -p 6443 -m aes-256-cfb -k test123 --fast-open" -x -e "kcpserver" -k "-t 127.0.0.1:6443 -l :6500 -mode fast2"
   sserver:
-    image: brainqi/shadowsocks-server:latest
+    # image: brainqi/shadowsocks-server:latest
+    image: mritd/shadowsocks
     restart: always
     ports:
-      - '8838:8838'
+      # - '8838:8838'
+      - '6443:6443'
+      - '6500:6500/udp'
     environment:
       - TZ=Asia/Shanghai
-    command: -k=bkbabydppwd --p=8838 -m=aes-256-cfb
+    # command: -k=bkbabydppwd --p=8838 -m=aes-256-cfb
+    command: -m "ss-server" -s "-s 0.0.0.0 -p 6443 -m aes-256-cfb -k bkbabydppwd --fast-open" -x -e "kcpserver" -k "-t 127.0.0.1:6443 -l :6500 -mode fast2"
+
+  # docker run -dt --name ssclient -p 1080:1080 mritd/shadowsocks -m "ss-local" -s "-s 127.0.0.1 -p 6500 -b 0.0.0.0 -l 1080 -m aes-256-cfb -k test123 --fast-open" -x -e "kcpclient" -k "-r SSSERVER_IP:6500 -l :6500 -mode fast2"
+  sclient:
+    image: mritd/shadowsocks
+    restart: always
+    ports:
+      - '1080:1080'
+    command: -m "ss-local" -s "-s 127.0.0.1 -p 6500 -b 0.0.0.0 -l 1080 -m aes-256-cfb -k bkbabydppwd --fast-open" -x -e "kcpclient" -k "-r 127.0.0.1:6500 -l :6500 -mode fast2"
+
