@@ -263,17 +263,30 @@ function do_pwdlogin()
 
 function do_docker()
 {
-  yum install -y yum-utils
-  yum-config-manager --add-repo \
-                      https://download.docker.com/linux/centos/docker-ce.repo
+  yum remove docker \
+    docker-client \
+    docker-client-latest \
+    docker-common \
+    docker-latest \
+    docker-latest-logrotate \
+    docker-logrotate \
+    docker-selinux \
+    docker-engine-selinux \
+    docker-engine \
+    docker-compose
+
+  yum install -y yum-utils \
+    device-mapper-persistent-data \
+    lvm2
+  yum-config-manager \
+    --add-repo https://download.docker.com/linux/centos/docker-ce.repo
   yum makecache fast
   yum install docker-ce -y
+  go_serv "docker"
 
   yum install python34 python34-pip -y
   pip3 install --upgrade pip
   pip3 install docker-compose
-
-  go_serv "docker"
 }
 
 function do_shadowsocks2()
