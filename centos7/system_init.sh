@@ -263,7 +263,8 @@ function do_pwdlogin()
 
 function do_docker()
 {
-  yum remove docker \
+  yum remove -y \
+    docker \
     docker-client \
     docker-client-latest \
     docker-common \
@@ -284,7 +285,10 @@ function do_docker()
   yum install docker-ce -y
   go_serv "docker"
 
-  yum install python34 python34-pip -y
+  yum install -y \
+    python34 \
+    python34-devel \
+    python34-pip
   pip3 install --upgrade pip
   pip3 install docker-compose
 }
