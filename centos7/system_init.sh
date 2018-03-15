@@ -2,6 +2,8 @@
 
 # 目前仅仅适用于do/centos7服务器的初装
 
+# 使用淘宝源：ALI_SOURCE=1
+
 declare basepath=$(cd `dirname "$0"`; pwd)
 cd "$basepath"
 source functions/core.bash
@@ -279,8 +281,12 @@ function do_docker()
   yum install -y yum-utils \
     device-mapper-persistent-data \
     lvm2
-  yum-config-manager \
-    --add-repo https://download.docker.com/linux/centos/docker-ce.repo
+  if [[ $ALI_SOURCE = 1 ]]; then
+    declare url=http://mirrors.aliyun.com/docker-ce/linux/centos/docker-ce.repo
+  else
+    declare url=https://download.docker.com/linux/centos/docker-ce.repo
+  fi
+  yum-config-manager --add-repo $url
   yum makecache fast
   yum install docker-ce -y
   go_serv "docker"
