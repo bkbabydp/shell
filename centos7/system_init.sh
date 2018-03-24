@@ -152,7 +152,7 @@ EOF
 function do_shadowsocks()
 {
   cd "$basepath/../docker/shadowsocks"
-  docker-compose up sss -d
+  docker-compose up -d sss
   docker-compose ps
   cd "$basepath"
   firewall-cmd --add-port=6443/tcp --add-port=6500/udp --permanent
