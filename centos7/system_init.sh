@@ -128,26 +128,36 @@ EOF
 }
 
 # *8
+# function do_shadowsocks()
+# {
+#   curl -sSL "https://copr.fedoraproject.org/coprs/librehat/shadowsocks/repo/epel-7/librehat-shadowsocks-epel-7.repo" -o "/etc/yum.repos.d/librehat-shadowsocks-epel-7.repo"
+#   yum update -y
+#   yum install shadowsocks-libev -y
+#   cat > /etc/shadowsocks-libev/config.json <<EOF
+# {
+#   "server":"0.0.0.0",
+#   "server_port":8688,
+#   "local_address":"127.0.0.1",
+#   "local_port":1080,
+#   "password":"bkbabydppwd",
+#   "timeout":60,
+#   "method":"aes-256-cfb",
+#   "fast_open":true
+# }
+# EOF
+#   go_serv "shadowsocks-libev"
+#   firewall-cmd --add-port=8688/tcp --permanent
+#   firewall-cmd --add-port=8688/udp --permanent
+# }
 function do_shadowsocks()
 {
-  curl -sSL "https://copr.fedoraproject.org/coprs/librehat/shadowsocks/repo/epel-7/librehat-shadowsocks-epel-7.repo" -o "/etc/yum.repos.d/librehat-shadowsocks-epel-7.repo"
-  yum update -y
-  yum install shadowsocks-libev -y
-  cat > /etc/shadowsocks-libev/config.json <<EOF
-{
-  "server":"0.0.0.0",
-  "server_port":8688,
-  "local_address":"127.0.0.1",
-  "local_port":1080,
-  "password":"bkbabydppwd",
-  "timeout":60,
-  "method":"aes-256-cfb",
-  "fast_open":true
-}
-EOF
-  go_serv "shadowsocks-libev"
-  firewall-cmd --add-port=8688/tcp --permanent
-  firewall-cmd --add-port=8688/udp --permanent
+  cd "$basepath/../docker/shadowsocks"
+  docker-compose up sss -d
+  docker-compose ps
+  cd "$basepath"
+  firewall-cmd --add-port=6443/tcp --add-port=6500/udp --permanent
+  firewall-cmd --reload
+  firewall-cmd --list-all
 }
 
 # *9
@@ -242,6 +252,7 @@ function do_more()
   do_ssh
   do_david
   do_ban
+  do_docker
   do_shadowsocks
 }
 
@@ -299,24 +310,24 @@ function do_docker()
   pip3 install docker-compose
 }
 
-function do_shadowsocks2()
-{
-  declare port_s=8388
-  declare port_k=8389
-  declare password=bkbabydppwd
-  docker rm ss -f
-  docker run -dt \
-              --name ss \
-              -p $port_s:$port_s \
-              -p $port_k:$port_k/udp \
-              mritd/shadowsocks \
-              -s "-s 0.0.0.0 -p $port_s -m aes-256-cfb -k $password --fast-open" \
-              -k "-t 127.0.0.1:$port_s -l :$port_k -mode fast2" \
-              -x
-  firewall-cmd --add-port=$port_s/tcp --permanent
-  firewall-cmd --add-port=$port_k/udp --permanent
-  firewall-cmd --reload
-}
+# function do_shadowsocks2()
+# {
+#   declare port_s=8388
+#   declare port_k=8389
+#   declare password=bkbabydppwd
+#   docker rm ss -f
+#   docker run -dt \
+#               --name ss \
+#               -p $port_s:$port_s \
+#               -p $port_k:$port_k/udp \
+#               mritd/shadowsocks \
+#               -s "-s 0.0.0.0 -p $port_s -m aes-256-cfb -k $password --fast-open" \
+#               -k "-t 127.0.0.1:$port_s -l :$port_k -mode fast2" \
+#               -x
+#   firewall-cmd --add-port=$port_s/tcp --permanent
+#   firewall-cmd --add-port=$port_k/udp --permanent
+#   firewall-cmd --reload
+# }
 
 # *0
 function do_help()
@@ -346,7 +357,6 @@ Actions:
     normal         yum + update + rootpwd + ssh + david + ban
     pwdlogin       yes | no
     docker         Install docker.
-    shadowsocks2
 
 This command help you init the VPS on DO.
 
