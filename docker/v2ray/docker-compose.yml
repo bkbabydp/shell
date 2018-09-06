@@ -1,0 +1,13 @@
+# docker-compose down && docker-compose up -d && docker-compose logs -f
+version: '3'
+services:
+  v2ray:
+    image: v2ray/official
+    restart: always
+    ports:
+      - 10087-10200:10087-10200
+    volumes:
+      - ./etc:/etc/v2ray
+    # command: tail -f /etc/v2ray/.keep
+    environment:
+      - TZ=Asia/Shanghai

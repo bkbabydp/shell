@@ -1,0 +1,39 @@
+{
+  "inbound": {
+    "port": 10087,
+    "protocol": "vmess",
+    "settings": {
+      "clients": [
+        {
+          "id": "3b6d2421-b97e-f66b-806d-fa912c84e47b",
+          "alterId": 100
+        }
+      ]
+    },
+    "detour": {
+      "to": "dynamicPort"
+    }
+  },
+  "inboundDetour": [
+    {
+      "protocol": "vmess",
+      "port": "10088-10200",
+      "tag": "dynamicPort",
+      "settings": {
+        "default": {
+          "level": 1,
+          "alterId": 100
+        }
+      },
+      "allocate": {
+        "strategy": "random",
+        "concurrency": 3,
+        "refresh": 5
+      }
+    }
+  ],
+  "outbound": {
+    "protocol": "freedom",
+    "settings": {}
+  }
+}
