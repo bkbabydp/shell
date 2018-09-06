@@ -1,4 +1,7 @@
 {
+  "log": {
+    "loglevel": "debug"
+  },
   "inbound": {
     "port": 10087,
     "protocol": "vmess",
